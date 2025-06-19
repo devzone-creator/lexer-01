@@ -1,0 +1,109 @@
+<!-- index.html - Lexika Compiler UI -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lexika Playground</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --panel: #1f2230;
+      --accent: #ff006e;
+      --text: #fefefe;
+      --muted: #9ea0a7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+    .subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      background: var(--panel);
+      color: var(--text);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+      padding: 1rem;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+    button {
+      background: var(--accent);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #d8005e;
+    }
+    pre {
+      margin-top: 1.5rem;
+      background: var(--panel);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <h1>Lexika</h1>
+  <div class="subtitle">A seductive language playground. Type. Run. Reveal meaning.</div>
+
+  <textarea id="codeInput">x = 2 + 3 * (4 - 1);</textarea>
+  <button onclick="runCode()">Run Lexika</button>
+  <pre id="output">Output will appear here...</pre>
+
+  <footer>Created with ❤️ by Devzone-creator</footer>
+
+  <script>
+    async function runCode() {
+      const code = document.getElementById('codeInput').value;
+      const output = document.getElementById('output');
+      output.textContent = 'Processing...';
+      try {
+        const res = await fetch('/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.text();
+        output.textContent = data;
+      } catch (err) {
+        output.textContent = 'Error: ' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
